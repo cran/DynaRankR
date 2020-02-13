@@ -56,6 +56,12 @@ add_new_ids_tenure <- function(new.ids, working.ranks, contestants, period){
   new.ids <- contestants[contestants$id %in% new.ids &
                            contestants$period == period,]
   
+  if('convention2' %in% names(new.ids)){
+    new.ids <- new.ids[order(new.ids$convention1, new.ids$convention2),]
+  }else{
+    new.ids <- new.ids[order(new.ids$convention1),]
+  }
+  
   if(any(!sapply(new.ids[1,startsWith(names(new.ids), 'convention')], class) %in% c('Date', 'numeric'))){
     stop('Conventions must be dates or numeric')
   }
@@ -77,6 +83,12 @@ add_new_ids_tenure <- function(new.ids, working.ranks, contestants, period){
 add_new_ids_phys_attr <- function(new.ids, working.ranks, contestants, period){
   new.ids <- contestants[contestants$id %in% new.ids &
                            contestants$period == period,]
+  
+  if('convention2' %in% names(new.ids)){
+    new.ids <- new.ids[order(new.ids$convention1, new.ids$convention2, decreasing = TRUE),]
+  }else{
+    new.ids <- new.ids[order(new.ids$convention1, decreasing = TRUE),]
+  }
   
   if(any(!sapply(new.ids[1,startsWith(names(new.ids), 'convention')], class) %in% c('Date', 'numeric'))){
     stop('Conventions must be numeric')
